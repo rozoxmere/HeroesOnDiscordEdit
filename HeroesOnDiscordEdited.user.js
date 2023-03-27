@@ -61,6 +61,11 @@
                 partyMembersCount = Object.keys(Engine.party.getMembers()).length
             }
         }
+        else {
+            if (g.party != 0 ){
+                partyMembersCount = Object.keys(g.party).length
+            }
+        }
 
         const request = new XMLHttpRequest()
         request.open('POST', correctWebhookUrl, true)
