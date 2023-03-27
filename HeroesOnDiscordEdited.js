@@ -66,7 +66,7 @@
         request.open('POST', correctWebhookUrl, true)
         request.setRequestHeader('Content-Type', 'application/json')
         request.send(JSON.stringify({
-            content: `**@here ${type1}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick}) \n`,
+            content: `**@here ${type1}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
             username: 'Wysłannik zakonu',
             avatar_url: 'https://micc.garmory-cdn.cloud/obrazki/npc/bur/zr_ithan.gif',
             // embeds: [{
