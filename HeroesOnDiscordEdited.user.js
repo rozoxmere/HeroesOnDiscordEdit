@@ -33,10 +33,7 @@
 
     function sendDiscordAlert(webhookUrl, playerNick, npc, mapName, serverName)
     {
-        let partyMembersCount = null
-        if (Engine.party != undefined ){
-            partyMembersCount = Object.keys(Engine.party.getMembers()).length
-        }
+        let partyMembersCount = null      
 
         let color = 8388608 //red
         let type1 = 'Tytan'
@@ -60,6 +57,9 @@
         if (getCookie('interface') === 'ni')
         {
             addToThumbnail = 'https://micc.garmory-cdn.cloud/obrazki/npc/'
+            if (Engine.party != undefined ){
+                partyMembersCount = Object.keys(Engine.party.getMembers()).length
+            }
         }
 
         const request = new XMLHttpRequest()
