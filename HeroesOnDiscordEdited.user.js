@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes on Discord edited
 // @namespace    http://tampermonkey.net/
-// @version      2.10.1.3
+// @version      2.10.1.3.1
 // @description  Quickly send discord messages for heroes and titans edited by rozoxmere
 // @author       Kris Aphalon
 // @match        https://*.margonem.pl/
@@ -36,14 +36,13 @@
         let partyMembersCount = null      
 
         let color = 8388608 //red
-        let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
         let correctWebhookUrl = webhookUrl;
-        if (isHeros(npc.d))
+        if (isHeros(npc))
         {
             color = 8388736 //purple
             correctWebhookUrl = settings.webhookHeroesUrl
         }
-        else if (isAdditionalNpcToSearch(npc.d))
+        else if (isAdditionalNpcToSearch(npc))
         {
             type = ''
             color = 12320855 //dark pink
@@ -67,7 +66,7 @@
         request.open('POST', correctWebhookUrl, true)
         request.setRequestHeader('Content-Type', 'application/json')
         request.send(JSON.stringify({
-            content: `**@here ${type}:** ${npc.d.nick} - ${mapName} (${npc.d.x}, ${npc.d.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
+            content: `**@here ${type}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
             username: 'Wysłannik zakonu',
             avatar_url: 'https://micc.garmory-cdn.cloud/obrazki/npc/bur/zr_ithan.gif',
             // embeds: [{
@@ -109,12 +108,9 @@
 
     function displayPopup(nick, npc, map)
     {
-        let type = 'Tytan'
-        if (isHeros(npc))
-        {
-            type = 'Heros'
-        }
-        else if (isAdditionalNpcToSearch(npc))
+        let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
+
+        if (isAdditionalNpcToSearch(npc))
         {
             type = ''
         }
@@ -168,7 +164,7 @@
             {
                 name = settings.name
             }
-            sendDiscordAlert(settings.webhookUrl, name, npc, map.name, getServerName())
+            sendDiscordAlert(settings.webhookUrl, name, npc, map.name, getServerName(), type)
             closePopup()
         })
         buttonContainer.appendChild(yesButton)
