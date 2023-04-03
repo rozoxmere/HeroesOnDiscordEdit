@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes on Discord edited
 // @namespace    http://tampermonkey.net/
-// @version      2.10.1.3.1
+// @version      2.10.1.3.2
 // @description  Quickly send discord messages for heroes and titans edited by rozoxmere
 // @author       Kris Aphalon
 // @match        https://*.margonem.pl/
@@ -31,7 +31,7 @@
     style.appendChild(document.createTextNode(css))
     document.head.appendChild(style)
 
-    function sendDiscordAlert(webhookUrl, playerNick, npc, mapName, serverName)
+    function sendDiscordAlert(webhookUrl, playerNick, npc, mapName, serverName, type)
     {
         let partyMembersCount = null      
 
@@ -66,7 +66,7 @@
         request.open('POST', correctWebhookUrl, true)
         request.setRequestHeader('Content-Type', 'application/json')
         request.send(JSON.stringify({
-            content: `**@here ${type}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
+            content: `**@here ${type}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick})\n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
             username: 'Wysłannik zakonu',
             avatar_url: 'https://micc.garmory-cdn.cloud/obrazki/npc/bur/zr_ithan.gif',
             // embeds: [{
@@ -108,11 +108,16 @@
 
     function displayPopup(nick, npc, map)
     {
-        let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
+        let typeCapitalized = ''
 
         if (isAdditionalNpcToSearch(npc))
         {
-            type = ''
+            typeCapitalized = ''
+        }
+        else{
+
+            let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
+            typeCapitalized = type[0].toUpperCase() + type.slice(1)    
         }
 
         const popup = document.createElement('div')
@@ -126,7 +131,7 @@
         imgContainer.className = 'heroes-discord__img'
 
         const img = document.createElement('img')
-        img.src = 'https://micc.garmory-cdn.cloud/obrazki/npc/' + npc.icon
+        img.src = 'https://micc.garmory-cdn.cloud/obrazki/npc/' + npc.d.icon
 
         imgContainer.appendChild(img)
 
@@ -136,7 +141,7 @@
         textContainer.className = 'heroes-discord__text'
 
         const info = document.createElement('span')
-        info.innerText = `${type} ${npc.nick} na mapie ${map.name} i kordach (${npc.x},${npc.y})`
+        info.innerText = `${typeCapitalized} ${npc.d.nick} na mapie ${map.name} i kordach (${npc.d.x},${npc.d.y})`
         textContainer.appendChild(info)
         textContainer.appendChild(document.createElement('br'))
         const question = document.createElement('span')
@@ -164,7 +169,7 @@
             {
                 name = settings.name
             }
-            sendDiscordAlert(settings.webhookUrl, name, npc, map.name, getServerName(), type)
+            sendDiscordAlert(settings.webhookUrl, name, npc.d, map.name, getServerName(), typeCapitalized)
             closePopup()
         })
         buttonContainer.appendChild(yesButton)
