@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes on Discord edited
 // @namespace    http://tampermonkey.net/
-// @version      2.10.1.2
+// @version      2.10.1.3
 // @description  Quickly send discord messages for heroes and titans edited by rozoxmere
 // @author       Kris Aphalon
 // @match        https://*.margonem.pl/
@@ -36,20 +36,16 @@
         let partyMembersCount = null      
 
         let color = 8388608 //red
-        let type1 = 'Tytan'
-        let type2 = 'tytana'
+        let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
         let correctWebhookUrl = webhookUrl;
-        if (isHeros(npc))
+        if (isHeros(npc.d))
         {
-            type1 = 'Heros'
-            type2 = 'herosa'
             color = 8388736 //purple
             correctWebhookUrl = settings.webhookHeroesUrl
         }
-        else if (isAdditionalNpcToSearch(npc))
+        else if (isAdditionalNpcToSearch(npc.d))
         {
-            type1 = ''
-            type2 = 'npca'
+            type = ''
             color = 12320855 //dark pink
         }
 
@@ -71,7 +67,7 @@
         request.open('POST', correctWebhookUrl, true)
         request.setRequestHeader('Content-Type', 'application/json')
         request.send(JSON.stringify({
-            content: `**@here ${type1}:** ${npc.nick} - ${mapName} (${npc.x}, ${npc.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
+            content: `**@here ${type}:** ${npc.d.nick} - ${mapName} (${npc.d.x}, ${npc.d.y}) (Znalazł ${playerNick}) \n${ partyMembersCount != null ? ` W grupie ${partyMembersCount} graczy `: ""}`,
             username: 'Wysłannik zakonu',
             avatar_url: 'https://micc.garmory-cdn.cloud/obrazki/npc/bur/zr_ithan.gif',
             // embeds: [{
@@ -228,7 +224,7 @@
 
             const webhookLabel = document.createElement('label')
             webhookLabel.className = 'heroes-discord__label'
-            webhookLabel.innerText = 'Link do webhooka (poproś o niego zarządcę serwera discord)'
+            webhookLabel.innerText = 'Link do webhooka na kolosy'
             popupBackground.appendChild(webhookLabel)
 
             webhookInput.type = 'text'
@@ -331,7 +327,7 @@
                 {
                     if (npc.d.wt > 79 || isAdditionalNpcToSearch(npc.d))
                     {
-                        displayPopup(Engine.hero.nick, npc.d, Engine.map.d)
+                        displayPopup(Engine.hero.nick, npc, Engine.map.d)
                     }
                 })
 
