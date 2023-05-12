@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Heroes on Discord edited
 // @namespace    http://tampermonkey.net/
-// @version      2.10.1.3.2
+// @version      2.10.1.3.3
 // @description  Quickly send discord messages for heroes and titans edited by rozoxmere
 // @author       Kris Aphalon
 // @match        https://*.margonem.pl/
