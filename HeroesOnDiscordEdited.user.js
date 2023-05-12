@@ -115,9 +115,11 @@
             typeCapitalized = ''
         }
         else{
-
+            try {
             let type = npc.tip[0].split("<i>")[1].split("</i>")[0]
-            typeCapitalized = type[0].toUpperCase() + type.slice(1)    
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         const popup = document.createElement('div')
